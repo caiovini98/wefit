@@ -1,6 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
+import { Products } from "../../models/products";
 
 export default function Home() {
-  return <h1>Essa é a tela Home</h1>;
+  const [products, setProducts] = useState<Products[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("http://localhost:8000/products")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Erro ao carregar os dados.");
+        }
+        return res.json();
+      })
+      .then((data: Products[]) => {
+        setProducts(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erro de rede:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  return (
+    <>
+      <h1>Essta é a tela de Home</h1>
+      {products.map((product) => (
+        <h4>{product.title}</h4>
+      ))}
+    </>
+  );
 }
