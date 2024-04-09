@@ -1,9 +1,10 @@
 const theme = {
   colors: {
-    primary: "red",
-    white: "#FFFFFF",
+    primary: "#2F2E41",
+    secondary: "#FFFFFF",
+    color_button: "#009EDD",
+    color_text: "#039B00",
     black: "#000000",
-    teste: "#AFAAFA",
   },
 };
 
