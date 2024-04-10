@@ -52,7 +52,7 @@ export const SearchIcon = styled(IoIosSearch)`
 export const ProductCardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   gap: 20px;
   margin-top: 20px;
 `;
