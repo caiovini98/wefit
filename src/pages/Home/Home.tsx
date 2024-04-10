@@ -47,20 +47,34 @@ export default function Home() {
     setSearchMovie(event.target.value);
   };
 
+  const handleSearch = () => {
+    console.log("searchMovie: ", searchMovie);
+    fetch(`http://localhost:8000/products?q=${searchMovie}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao buscar produtos");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Resultado da busca:", data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar produtos:", error);
+      });
+  };
+
   return (
     <Container>
       <InputContainer>
         <Input value={searchMovie} onChange={handleInputChange} />
-        <ButtonSearch
-          disabled={!searchMovie}
-          onClick={() => console.log("clicou: ", searchMovie)}
-        >
+        <ButtonSearch disabled={!searchMovie} onClick={handleSearch}>
           <SearchIcon />
         </ButtonSearch>
       </InputContainer>
       <ProductCardsContainer>
         {products.map((product) => (
-          <ProductCards>
+          <ProductCards key={product.id}>
             <ImageProduct src={product.image} alt="Product" />
             <DetailProduct>
               <TitleProduct>{product.title}</TitleProduct>
