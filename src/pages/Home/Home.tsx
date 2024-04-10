@@ -57,7 +57,21 @@ export default function Home() {
   function handlePopState() {
     const path = window.location.pathname;
     const searchTerm: string = path.split("/").pop() as string;
-    setSearchMovie(decodeURIComponent(searchTerm));
+
+    // Se der BO, é só apagar aqui
+    fetch(`http://localhost:8000/products?q=${searchTerm}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erro ao buscar produtos");
+        }
+        return response.json();
+      })
+      .then((data: Products[]) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar produtos:", error);
+      });
   }
 
   useEffect(() => {
@@ -70,7 +84,6 @@ export default function Home() {
   };
 
   const handleSearch = () => {
-    console.log("searchMovie: ", searchMovie);
     fetch(`http://localhost:8000/products?q=${searchMovie}`)
       .then((response) => {
         if (!response.ok) {
