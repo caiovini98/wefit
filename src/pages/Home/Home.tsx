@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import { Products } from "../../models/products";
 import {
@@ -21,6 +22,9 @@ import {
 } from "./styles";
 
 export default function Home() {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchMovie, setSearchMovie] = useState("");
@@ -43,6 +47,24 @@ export default function Home() {
       });
   }, []);
 
+  useEffect(() => {
+    const searchTerm = decodeURIComponent(
+      location.pathname.split("/").pop() as string
+    );
+    setSearchMovie(searchTerm);
+  }, [location.pathname]);
+
+  function handlePopState() {
+    const path = window.location.pathname;
+    const searchTerm: string = path.split("/").pop() as string;
+    setSearchMovie(decodeURIComponent(searchTerm));
+  }
+
+  useEffect(() => {
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
   const handleInputChange = (event: any) => {
     setSearchMovie(event.target.value);
   };
@@ -56,12 +78,17 @@ export default function Home() {
         }
         return response.json();
       })
-      .then((data) => {
+      .then((data: Products[]) => {
         console.log("Resultado da busca:", data);
+        setProducts(data);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
       });
+
+    const searchTerm = encodeURIComponent(searchMovie);
+    const newPath = `/${searchTerm}`;
+    navigate(newPath);
   };
 
   return (
