@@ -1,4 +1,5 @@
 import React from "react";
+import { useCart } from "../../context/CartContext";
 import {
   Container,
   Title,
@@ -6,10 +7,16 @@ import {
   ItensCart,
   Span,
   Itens,
-  Teste,
+  IconBag,
 } from "./styles";
 
 export default function HeaderComponent() {
+  const { cart } = useCart();
+
+  const handleClick = () => {
+    console.log("cart: ", cart);
+  };
+
   return (
     <>
       <Container>
@@ -17,9 +24,9 @@ export default function HeaderComponent() {
         <BoxCart>
           <ItensCart>
             <Span>Meu Carrinho</Span>
-            <Itens>0 itens</Itens>
+            <Itens>{cart.length} itens</Itens>
           </ItensCart>
-          <Teste />
+          <IconBag onClick={handleClick} />
         </BoxCart>
       </Container>
     </>

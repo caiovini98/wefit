@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useCart } from "../../context/CartContext";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import { Products } from "../../models/products";
@@ -24,6 +25,7 @@ import {
 export default function Home() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { addToCart, setCart, cart } = useCart();
 
   const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +40,11 @@ export default function Home() {
         return res.json();
       })
       .then((data: Products[]) => {
-        setProducts(data);
+        const newData: Products[] = data.map((item) => ({
+          ...item,
+          quantity: 0,
+        }));
+        setCart(newData);
         setLoading(false);
       })
       .catch((error) => {
@@ -67,7 +73,11 @@ export default function Home() {
         return response.json();
       })
       .then((data: Products[]) => {
-        setProducts(data);
+        const newData: Products[] = data.map((item) => ({
+          ...item,
+          quantity: 0,
+        }));
+        setCart(newData);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
@@ -93,7 +103,11 @@ export default function Home() {
       })
       .then((data: Products[]) => {
         console.log("Resultado da busca:", data);
-        setProducts(data);
+        const newData: Products[] = data.map((item) => ({
+          ...item,
+          quantity: 0,
+        }));
+        setCart(newData);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
@@ -102,6 +116,10 @@ export default function Home() {
     const searchTerm = encodeURIComponent(searchMovie);
     const newPath = `/${searchTerm}`;
     navigate(newPath);
+  };
+
+  const handleAddToCart = (product: Products) => {
+    addToCart(product);
   };
 
   return (
@@ -113,17 +131,17 @@ export default function Home() {
         </ButtonSearch>
       </InputContainer>
       <ProductCardsContainer>
-        {products.map((product) => (
+        {cart.map((product) => (
           <ProductCards key={product.id}>
             <ImageProduct src={product.image} alt="Product" />
             <DetailProduct>
               <TitleProduct>{product.title}</TitleProduct>
               <PriceProduct>R$ {product.price}</PriceProduct>
             </DetailProduct>
-            <ButtonAddProduct>
+            <ButtonAddProduct onClick={() => handleAddToCart(product)}>
               <IconBox>
                 <IconAddCart />
-                <QuantityProduct>0</QuantityProduct>
+                <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
               </IconBox>
               <TitleAddCard>ADICIONAR AO CARRINHO</TitleAddCard>
             </ButtonAddProduct>

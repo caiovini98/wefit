@@ -35,7 +35,7 @@ export const Itens = styled.span`
   color: ${(props) => props.theme.colors.itens};
 `;
 
-export const Teste = styled(BsBagPlus)`
+export const IconBag = styled(BsBagPlus)`
   color: ${(props) => props.theme.colors.secondary};
   font-size: 24px;
   cursor: pointer;

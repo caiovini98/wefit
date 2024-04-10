@@ -5,14 +5,17 @@ import { ThemeProvider } from "styled-components";
 import theme from "./theme";
 
 import HeaderComponent from "./components/Header/Header";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Router>
         <div className="container">
-          <HeaderComponent />
-          <AppRoutes />
+          <CartProvider>
+            <HeaderComponent />
+            <AppRoutes />
+          </CartProvider>
         </div>
       </Router>
     </ThemeProvider>
