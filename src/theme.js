@@ -5,6 +5,7 @@ const theme = {
     color_button: "#009EDD",
     color_text: "#039B00",
     black: "#000000",
+    itens: "#999999",
   },
 };
 

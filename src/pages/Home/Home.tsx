@@ -25,11 +25,11 @@ export default function Home() {
   }, []);
 
   return (
-    <>
+    <div style={{ backgroundColor: "red" }}>
       <h1>Essta é a tela de Home</h1>
       {products.map((product) => (
         <h4>{product.title}</h4>
       ))}
-    </>
+    </div>
   );
 }
