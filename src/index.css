@@ -1,6 +1,5 @@
 body {
   background-color: #2f2e41;
-  overflow: hidden;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -31,6 +30,6 @@ h6 {
 
 @media screen and (max-width: 1472px) {
   body {
-    overflow: scroll;
+    overflow: visible;
   }
 }

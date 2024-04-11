@@ -3,10 +3,12 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { GrSubtractCircle } from "react-icons/gr";
 import { FaTrash } from "react-icons/fa";
 
-export const Main = styled.main``;
+export const Main = styled.main`
+margin-bottom: 25px;
+`;
 
 export const Container = styled.div`
-  background-color: white;
+  background-color: ${(props) => props.theme.colors.secondary};
   border-radius: 5px;
   padding: 22px;
 `;
@@ -102,11 +104,7 @@ export const RemoveButton = styled.button`
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
   font-size: 20px;
 `;
