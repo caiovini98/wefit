@@ -159,7 +159,7 @@ export default function Home() {
                 <IconAddCart />
                 <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
               </IconBox>
-              <TitleAddCard>ADICIONAR AO CARRINHO</TitleAddCard>
+              <TitleAddCard>Adicionar ao carrinho</TitleAddCard>
             </ButtonAddProduct>
           </ProductCards>
         ))}

@@ -62,8 +62,8 @@ export const ProductCardsContainer = styled.div`
 `;
 
 export const ProductCards = styled.div`
-  height: 300px;
-  width: 330px;
+  height: 390px;
+  width: 430px;
   background-color: ${(props) => props.theme.colors.secondary};
   border-radius: 5px;
   display: flex;
@@ -73,8 +73,8 @@ export const ProductCards = styled.div`
 `;
 
 export const ImageProduct = styled.img`
-  width: 140px;
-  height: 160px;
+  width: 160px;
+  height: 180px;
 `;
 
 export const DetailProduct = styled.div`
@@ -87,12 +87,12 @@ export const DetailProduct = styled.div`
 
 export const TitleProduct = styled.span`
   font-weight: bold;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 export const PriceProduct = styled.span`
   font-weight: bold;
-  font-size: 15px;
+  font-size: 19px;
 `;
 
 export const ButtonAddProduct = styled.button<ButtonProps>`
@@ -128,4 +128,5 @@ export const QuantityProduct = styled.span`
 export const TitleAddCard = styled.span`
   color: ${(props) => props.theme.colors.secondary};
   font-size: 14px;
+  text-transform: uppercase;
 `;
