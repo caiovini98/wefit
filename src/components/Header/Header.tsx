@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import {
   Container,
@@ -11,7 +12,8 @@ import {
 } from "./styles";
 
 export default function HeaderComponent() {
-  const { cart } = useCart();
+  const navigate = useNavigate();
+  const { cart, setMyCart } = useCart();
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
@@ -24,8 +26,11 @@ export default function HeaderComponent() {
   }, [cart]);
 
   const handleClick = () => {
-    console.log("cart: ", cart);
-    // Ir para o 'meu carrinho'
+    const cartFiltered = cart.filter((item) => item.quantity > 0);
+    setMyCart(cartFiltered);
+    if (totalItems > 0) {
+      navigate("/shopping-cart");
+    }
   };
 
   return (

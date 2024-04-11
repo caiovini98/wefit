@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
-import { useNavigate, useLocation } from "react-router-dom";
-import "./styles.css";
+import { useNavigate } from "react-router-dom";
 import { Products } from "../../models/products";
 import {
   Container,
@@ -24,10 +23,8 @@ import {
 
 export default function Home() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { addToCart, setCart, cart } = useCart();
 
-  // const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchMovie, setSearchMovie] = useState("");
   const [filmesDisponiveis, setFilmesDisponiveis] = useState<Products[]>([]);
@@ -144,7 +141,7 @@ export default function Home() {
       <ProductCardsContainer>
         {filmesDisponiveis.map((product) => (
           <ProductCards key={product.id}>
-            <ImageProduct src={product.image} alt="Product" />
+            <ImageProduct src={product.image} alt={product.image} />
             <DetailProduct>
               <TitleProduct>{product.title}</TitleProduct>
               <PriceProduct>

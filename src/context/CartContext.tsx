@@ -3,18 +3,23 @@ import { Products } from "../models/products";
 
 interface CartContextType {
   cart: Products[];
+  myCart: Products[];
   addToCart: (item: Products) => void;
   setCart: React.Dispatch<React.SetStateAction<Products[]>>;
+  setMyCart: React.Dispatch<React.SetStateAction<Products[]>>;
 }
 
 const CartContext = createContext<CartContextType>({
   cart: [],
+  myCart: [],
   addToCart: (item: Products) => {},
   setCart: () => {},
+  setMyCart: () => {},
 });
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Products[]>([]);
+  const [myCart, setMyCart] = useState<Products[]>([]);
 
   const addToCart = (product: Products) => {
     const hasProduct = cart.find((item) => item.id === product.id);
@@ -38,6 +43,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         cart,
         setCart,
         addToCart,
+        setMyCart,
+        myCart,
       }}
     >
       {children}
