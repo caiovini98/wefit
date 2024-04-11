@@ -13,6 +13,7 @@ export const Title = styled.span`
   color: ${(props) => props.theme.colors.secondary};
   font-weight: bold;
   font-size: 20px;
+  cursor: pointer;
 `;
 
 export const BoxCart = styled.div`

@@ -36,7 +36,7 @@ export default function HeaderComponent() {
   return (
     <>
       <Container>
-        <Title>WeMovies</Title>
+        <Title onClick={() => navigate("/")}>WeMovies</Title>
         <BoxCart>
           <ItensCart>
             <Span>Meu Carrinho</Span>
