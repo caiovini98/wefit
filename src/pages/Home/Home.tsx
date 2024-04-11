@@ -57,48 +57,35 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const searchTerm = decodeURIComponent(
-      location.pathname.split("/").pop() as string
-    );
-    setSearchMovie(searchTerm);
-  }, [location.pathname]);
+    function handlePopState() {
+      const path = window.location.pathname;
+      const searchTerm: string = path.split("/").pop() as string;
 
-  function handlePopState() {
-    const path = window.location.pathname;
-    const searchTerm: string = path.split("/").pop() as string;
-
-    // Se der BO, é só apagar aqui
-    fetch(`http://localhost:8000/products?q=${searchTerm}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erro ao buscar produtos");
-        }
-        return response.json();
-      })
-      .then((data: Products[]) => {
-        const newData: Products[] = data.map((item) => ({
-          ...item,
-          quantity: 0,
-        }));
-        const arrayAtualizado = newData.map((novo) => {
-          const existente = cart.find((elemento) => elemento.id === novo.id);
-          if (existente) {
-            return { ...novo, quantity: existente.quantity };
+      fetch(`http://localhost:8000/products?q=${searchTerm}`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao buscar produtos");
           }
-          return novo;
+          return response.json();
+        })
+        .then((data: Products[]) => {
+          const moviesFiltered = cart.filter((itemCart) =>
+            data.some((itemData) => itemData.id === itemCart.id)
+          );
+          console.log("moviesFiltered: ", moviesFiltered);
+          setFilmesDisponiveis(moviesFiltered);
+        })
+        .catch((error) => {
+          console.error("Erro ao buscar produtos:", error);
         });
+    }
 
-        setCart(arrayAtualizado);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar produtos:", error);
-      });
-  }
-
-  useEffect(() => {
     window.addEventListener("popstate", handlePopState);
-    return () => window.removeEventListener("popstate", handlePopState);
-  }, []);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [cart, setFilmesDisponiveis]);
 
   const handleInputChange = (event: any) => {
     setSearchMovie(event.target.value);
@@ -113,12 +100,11 @@ export default function Home() {
         return response.json();
       })
       .then((data: Products[]) => {
-        const terceiroArray = cart.filter((item2) =>
-          data.some((item1) => item1.id === item2.id)
+        const moviesFiltered = cart.filter((itemCart) =>
+          data.some((itemData) => itemData.id === itemCart.id)
         );
-        // updateCartWithSearchResults(data);
-        console.log("terceiroArray: ", terceiroArray);
-        setFilmesDisponiveis(terceiroArray);
+        // console.log("moviesFiltered: ", moviesFiltered);
+        setFilmesDisponiveis(moviesFiltered);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
@@ -130,6 +116,20 @@ export default function Home() {
   };
 
   const handleAddToCart = (product: Products) => {
+    const filmesDisponiveisAtualizados: Products[] = filmesDisponiveis.map(
+      (filmeAdicionado) => {
+        if (filmeAdicionado.id === product.id) {
+          return {
+            ...filmeAdicionado,
+            quantity: filmeAdicionado.quantity + 1,
+          };
+        }
+
+        return filmeAdicionado;
+      }
+    );
+    console.log("filmesDisponiveisAtualizados: ", filmesDisponiveisAtualizados);
+    setFilmesDisponiveis(filmesDisponiveisAtualizados);
     addToCart(product);
   };
 
@@ -147,9 +147,17 @@ export default function Home() {
             <ImageProduct src={product.image} alt="Product" />
             <DetailProduct>
               <TitleProduct>{product.title}</TitleProduct>
-              <PriceProduct>R$ {product.price}</PriceProduct>
+              <PriceProduct>
+                R${" "}
+                {product.price.toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
+              </PriceProduct>
             </DetailProduct>
-            <ButtonAddProduct onClick={() => handleAddToCart(product)}>
+            <ButtonAddProduct
+              colorAddCart={product.quantity}
+              onClick={() => handleAddToCart(product)}
+            >
               <IconBox>
                 <IconAddCart />
                 <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
@@ -162,3 +170,14 @@ export default function Home() {
     </Container>
   );
 }
+
+
+/**
+ * Fazer a primeira tela na Home
+ * Loading na API
+ * Tirar os consoles logs
+ * Refatorar nomes de variaveis
+ * Fazer a tela de compra realizada
+ * Fazer a tela de carrinho
+ * 
+ */

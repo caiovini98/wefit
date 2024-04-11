@@ -25,6 +25,7 @@ export default function HeaderComponent() {
 
   const handleClick = () => {
     console.log("cart: ", cart);
+    // Ir para o 'meu carrinho'
   };
 
   return (

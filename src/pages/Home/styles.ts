@@ -2,6 +2,10 @@ import styled from "styled-components";
 import { IoIosSearch } from "react-icons/io";
 import { LiaCartPlusSolid } from "react-icons/lia";
 
+interface ButtonProps {
+  colorAddCart: number;
+}
+
 export const Container = styled.div`
   min-height: 100vh;
 `;
@@ -91,13 +95,14 @@ export const PriceProduct = styled.span`
   font-size: 15px;
 `;
 
-export const ButtonAddProduct = styled.button`
+export const ButtonAddProduct = styled.button<ButtonProps>`
   height: 12%;
   width: 90%;
   border: none;
   cursor: pointer;
   border-radius: 5px;
-  background-color: ${(props) => props.theme.colors.color_button};
+  background-color: ${({ theme, colorAddCart }) =>
+    colorAddCart ? theme.colors.color_text : theme.colors.color_button};
   display: flex;
   align-items: center;
   justify-content: center;
