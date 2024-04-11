@@ -40,8 +40,6 @@ export default function ShoppingCart() {
     myCart.map((cartItem) => cartItem.quantity)
   );
 
-  console.log("quantities: ", quantities);
-
   const handleIncrement = (index: number) => {
     const updatedQuantities = [...quantities];
     updatedQuantities[index] += 1;

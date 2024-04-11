@@ -1,27 +1,27 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { Products } from "../models/products";
+import { Product } from "../models/product";
 
 interface CartContextType {
-  cart: Products[];
-  myCart: Products[];
-  addToCart: (item: Products) => void;
-  setCart: React.Dispatch<React.SetStateAction<Products[]>>;
-  setMyCart: React.Dispatch<React.SetStateAction<Products[]>>;
+  cart: Product[];
+  myCart: Product[];
+  addToCart: (item: Product) => void;
+  setCart: React.Dispatch<React.SetStateAction<Product[]>>;
+  setMyCart: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
 const CartContext = createContext<CartContextType>({
   cart: [],
   myCart: [],
-  addToCart: (item: Products) => {},
+  addToCart: (item: Product) => {},
   setCart: () => {},
   setMyCart: () => {},
 });
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<Products[]>([]);
-  const [myCart, setMyCart] = useState<Products[]>([]);
+  const [cart, setCart] = useState<Product[]>([]);
+  const [myCart, setMyCart] = useState<Product[]>([]);
 
-  const addToCart = (product: Products) => {
+  const addToCart = (product: Product) => {
     const hasProduct = cart.find((item) => item.id === product.id);
 
     if (hasProduct) {

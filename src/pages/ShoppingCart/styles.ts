@@ -12,7 +12,8 @@ export const Container = styled.div`
 `;
 
 export const Section = styled.section`
-  border-bottom: 1px solid blue;
+  border-bottom: 1px solid;
+  border-bottom-color: ${(props) => props.theme.colors.itens};
 `;
 
 export const Table = styled.table`

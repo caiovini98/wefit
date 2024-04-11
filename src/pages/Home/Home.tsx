@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
-import { Products } from "../../models/products";
+import { Product } from "../../models/product";
 import {
   Container,
   Input,
@@ -27,7 +27,7 @@ export default function Home() {
 
   const [loading, setLoading] = useState(true);
   const [searchMovie, setSearchMovie] = useState("");
-  const [filmesDisponiveis, setFilmesDisponiveis] = useState<Products[]>([]);
+  const [filmesDisponiveis, setFilmesDisponiveis] = useState<Product[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/products")
@@ -37,8 +37,8 @@ export default function Home() {
         }
         return res.json();
       })
-      .then((data: Products[]) => {
-        const newData: Products[] = data.map((item) => ({
+      .then((data: Product[]) => {
+        const newData: Product[] = data.map((item) => ({
           ...item,
           quantity: 0,
         }));
@@ -65,7 +65,7 @@ export default function Home() {
           }
           return response.json();
         })
-        .then((data: Products[]) => {
+        .then((data: Product[]) => {
           const moviesFiltered = cart.filter((itemCart) =>
             data.some((itemData) => itemData.id === itemCart.id)
           );
@@ -96,7 +96,7 @@ export default function Home() {
         }
         return response.json();
       })
-      .then((data: Products[]) => {
+      .then((data: Product[]) => {
         const moviesFiltered = cart.filter((itemCart) =>
           data.some((itemData) => itemData.id === itemCart.id)
         );
@@ -112,8 +112,8 @@ export default function Home() {
     navigate(newPath);
   };
 
-  const handleAddToCart = (product: Products) => {
-    const filmesDisponiveisAtualizados: Products[] = filmesDisponiveis.map(
+  const handleAddToCart = (product: Product) => {
+    const filmesDisponiveisAtualizados: Product[] = filmesDisponiveis.map(
       (filmeAdicionado) => {
         if (filmeAdicionado.id === product.id) {
           return {
