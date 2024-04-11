@@ -76,6 +76,10 @@ export default function ShoppingCart() {
     return priceTotal;
   };
 
+  const handleChangePage = () => {
+    navigate("/purchased");
+  };
+
   return (
     <Main>
       <Container>
@@ -135,7 +139,9 @@ export default function ShoppingCart() {
           </Table>
         </Section>
         <FinishBox>
-          <FinishButton>Finalizar pedido</FinishButton>
+          <FinishButton onClick={handleChangePage}>
+            Finalizar pedido
+          </FinishButton>
           <TotalBox>
             <Total>Total</Total>
             <PriceTotal>
