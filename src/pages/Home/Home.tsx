@@ -170,14 +170,3 @@ export default function Home() {
     </Container>
   );
 }
-
-
-/**
- * Fazer a primeira tela na Home
- * Loading na API
- * Tirar os consoles logs
- * Refatorar nomes de variaveis
- * Fazer a tela de compra realizada
- * Fazer a tela de carrinho
- * 
- */
