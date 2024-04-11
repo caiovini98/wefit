@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useCart } from "../../context/CartContext";
 import {
   Container,
@@ -12,6 +12,16 @@ import {
 
 export default function HeaderComponent() {
   const { cart } = useCart();
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const newTotalItems = cart.reduce(
+      (total, currentItem) => total + currentItem.quantity,
+      0
+    );
+
+    setTotalItems(newTotalItems);
+  }, [cart]);
 
   const handleClick = () => {
     console.log("cart: ", cart);
@@ -24,7 +34,7 @@ export default function HeaderComponent() {
         <BoxCart>
           <ItensCart>
             <Span>Meu Carrinho</Span>
-            <Itens>{cart.length} itens</Itens>
+            <Itens>{totalItems} itens</Itens>
           </ItensCart>
           <IconBag onClick={handleClick} />
         </BoxCart>

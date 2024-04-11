@@ -27,9 +27,10 @@ export default function Home() {
   const location = useLocation();
   const { addToCart, setCart, cart } = useCart();
 
-  const [products, setProducts] = useState<Products[]>([]);
+  // const [products, setProducts] = useState<Products[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchMovie, setSearchMovie] = useState("");
+  const [filmesDisponiveis, setFilmesDisponiveis] = useState<Products[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/products")
@@ -44,7 +45,9 @@ export default function Home() {
           ...item,
           quantity: 0,
         }));
+        console.log("newData: ", newData);
         setCart(newData);
+        setFilmesDisponiveis(newData);
         setLoading(false);
       })
       .catch((error) => {
@@ -77,7 +80,15 @@ export default function Home() {
           ...item,
           quantity: 0,
         }));
-        setCart(newData);
+        const arrayAtualizado = newData.map((novo) => {
+          const existente = cart.find((elemento) => elemento.id === novo.id);
+          if (existente) {
+            return { ...novo, quantity: existente.quantity };
+          }
+          return novo;
+        });
+
+        setCart(arrayAtualizado);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
@@ -102,12 +113,12 @@ export default function Home() {
         return response.json();
       })
       .then((data: Products[]) => {
-        console.log("Resultado da busca:", data);
-        const newData: Products[] = data.map((item) => ({
-          ...item,
-          quantity: 0,
-        }));
-        setCart(newData);
+        const terceiroArray = cart.filter((item2) =>
+          data.some((item1) => item1.id === item2.id)
+        );
+        // updateCartWithSearchResults(data);
+        console.log("terceiroArray: ", terceiroArray);
+        setFilmesDisponiveis(terceiroArray);
       })
       .catch((error) => {
         console.error("Erro ao buscar produtos:", error);
@@ -131,7 +142,7 @@ export default function Home() {
         </ButtonSearch>
       </InputContainer>
       <ProductCardsContainer>
-        {cart.map((product) => (
+        {filmesDisponiveis.map((product) => (
           <ProductCards key={product.id}>
             <ImageProduct src={product.image} alt="Product" />
             <DetailProduct>

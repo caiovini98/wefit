@@ -15,11 +15,10 @@ const CartContext = createContext<CartContextType>({
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<Products[]>([]);
-  const [carrinho, setCarrinho] = useState<Products[]>([]);
 
   const addToCart = (product: Products) => {
-    console.log("product: ", product);
     const hasProduct = cart.find((item) => item.id === product.id);
+    console.log("hasProduct: ", hasProduct);
 
     if (hasProduct) {
       const updatedCart = cart.map((item) =>
@@ -29,10 +28,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } else {
       setCart([...cart, { ...product, quantity: 1 }]);
     }
+
+    console.log("cart: ", cart);
   };
 
   return (
-    <CartContext.Provider value={{ cart, setCart, addToCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        setCart,
+        addToCart,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
