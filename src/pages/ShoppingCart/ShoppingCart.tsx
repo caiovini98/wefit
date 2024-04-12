@@ -28,6 +28,19 @@ import {
   AddIcon,
   SubtractIcon,
   TrashIcon,
+  SectionMobile,
+  ImageMobile,
+  InfoCartMobile,
+  TitleBoxMobile,
+  TitleMobile,
+  CartPriceBoxMobile,
+  SubtotalBoxMobile,
+  FinishBoxMobile,
+  IncrementOrDecrementBoxMobile,
+  SubtotalMobile,
+  PriceMobile,
+  Divider,
+  TotalBoxMobile,
 } from "./styles";
 
 import { useCart } from "../../context/CartContext";
@@ -100,47 +113,23 @@ export default function ShoppingCart() {
           <>
             {myCart.map((cartItem, index) => (
               <>
-                <section style={{ display: "flex", marginTop: 20 }}>
-                  <img
-                    style={{ width: 70, height: 80 }}
-                    src={cartItem.image}
-                    alt={cartItem.image}
-                  />
-                  <div style={{ marginLeft: 16, flexGrow: 1 }}>
-                    <div
-                      style={{
-                        // backgroundColor: "red",
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <span style={{ fontSize: 16 }}>{cartItem.title}</span>
-                      <div
-                        style={{
-                          display: "flex",
-                          gap: 14,
-                          alignItems: "center",
-                        }}
-                      >
-                        <span>
+                <SectionMobile>
+                  <ImageMobile src={cartItem.image} alt={cartItem.image} />
+                  <InfoCartMobile>
+                    <TitleBoxMobile>
+                      <TitleMobile>{cartItem.title}</TitleMobile>
+                      <CartPriceBoxMobile>
+                        <ProductPrice isMobileView={isMobileView}>
                           R${" "}
                           {cartItem.price.toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                           })}
-                        </span>
+                        </ProductPrice>
                         <TrashIcon isMobileView={isMobileView} />
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        marginTop: 15,
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <div style={{ display: "flex", alignItems: "center" }}>
+                      </CartPriceBoxMobile>
+                    </TitleBoxMobile>
+                    <FinishBoxMobile>
+                      <IncrementOrDecrementBoxMobile>
                         <IncrementOrDecrementButton
                           isMobileView={isMobileView}
                           onClick={() => handleDecrement(index)}
@@ -158,44 +147,34 @@ export default function ShoppingCart() {
                         >
                           <AddIcon />
                         </IncrementOrDecrementButton>
-                      </div>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          marginRight: 5,
-                          marginTop: 10,
-                          borderTop: 3,
-                        }}
-                      >
-                        <span>Subtotal</span>
-                        <span>
+                      </IncrementOrDecrementBoxMobile>
+                      <SubtotalBoxMobile>
+                        <SubtotalMobile>Subtotal</SubtotalMobile>
+                        <PriceMobile>
                           R$ {moneyMask(cartItem.price, quantities[index])}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </section>
+                        </PriceMobile>
+                      </SubtotalBoxMobile>
+                    </FinishBoxMobile>
+                  </InfoCartMobile>
+                </SectionMobile>
               </>
             ))}
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                marginTop: 20,
-                borderTop: "1px solid",
-                borderTopColor: "#999",
-              }}
-            >
-              <span>Total</span>
-              <span>
+            <Divider />
+            <TotalBoxMobile>
+              <Total>Total</Total>
+              <PriceTotal>
                 R${" "}
                 {calculatePriceTotal().toLocaleString("pt-BR", {
                   minimumFractionDigits: 2,
                 })}
-              </span>
-            </div>
-            <button style={{ width: "100%" }}>Finalizar pedido</button>
+              </PriceTotal>
+            </TotalBoxMobile>
+            <FinishButton
+              isMobileView={isMobileView}
+              onClick={handleChangePage}
+            >
+              Finalizar pedido
+            </FinishButton>
           </>
         ) : (
           <>
@@ -216,7 +195,7 @@ export default function ShoppingCart() {
                           <Image src={cartItem.image} alt={cartItem.image} />
                           <ProductInfo>
                             <ProductName>{cartItem.title}</ProductName>
-                            <ProductPrice>
+                            <ProductPrice isMobileView={isMobileView}>
                               R${" "}
                               {cartItem.price.toLocaleString("pt-BR", {
                                 minimumFractionDigits: 2,
@@ -260,7 +239,10 @@ export default function ShoppingCart() {
               </Table>
             </Section>
             <FinishBox>
-              <FinishButton onClick={handleChangePage}>
+              <FinishButton
+                isMobileView={isMobileView}
+                onClick={handleChangePage}
+              >
                 Finalizar pedido
               </FinishButton>
               <TotalBox>

@@ -15,12 +15,6 @@ export const Container = styled.div`
   background-color: ${(props) => props.theme.colors.secondary};
   border-radius: 5px;
   padding: 22px;
-
-  @media screen and (max-width: 790px) {
-    /* Seu estilo para telas menores que 790x830 */
-    margin-left: 10px;
-    /* background-color: red; */
-  }
 `;
 
 export const Section = styled.section`
@@ -77,9 +71,9 @@ export const ProductName = styled.span`
   font-weight: bold;
 `;
 
-export const ProductPrice = styled.span`
+export const ProductPrice = styled.span<Props>`
   color: ${(props) => props.theme.colors.black};
-  font-size: 22px;
+  font-size: ${({ isMobileView }) => (isMobileView ? "18px" : "22px")};
   font-weight: bold;
 `;
 
@@ -125,9 +119,9 @@ export const FinishBox = styled.section`
   justify-content: space-between;
 `;
 
-export const FinishButton = styled.button`
+export const FinishButton = styled.button<Props>`
   height: 35px;
-  width: 15%;
+  width: ${({ isMobileView }) => (isMobileView ? "100%" : "15%")};
   border: none;
   cursor: pointer;
   border-radius: 5px;
@@ -178,4 +172,82 @@ export const TrashIcon = styled(FaTrash)<Props>`
   cursor: pointer;
 `;
 
-// 790x830
+export const SectionMobile = styled.section`
+  display: flex;
+  margin-top: 20px;
+`;
+
+export const ImageMobile = styled.img`
+  width: 70px;
+  height: 80px;
+`;
+
+export const InfoCartMobile = styled.div`
+  margin-left: 16px;
+  flex-grow: 1;
+`;
+
+export const TitleBoxMobile = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const TitleMobile = styled.span`
+  font-size: 16px;
+  color: ${(props) => props.theme.colors.black};
+  font-weight: 600;
+`;
+
+export const CartPriceBoxMobile = styled.div`
+  display: flex;
+  gap: 14px;
+  align-items: center;
+`;
+
+export const FinishBoxMobile = styled.div`
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const IncrementOrDecrementBoxMobile = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const SubtotalBoxMobile = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5px;
+  margin-top: 10px;
+  border-top: 3px;
+`;
+
+export const SubtotalMobile = styled.span`
+  text-transform: uppercase;
+  color: ${(props) => props.theme.colors.itens};
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+`;
+
+export const PriceMobile = styled.span`
+  font-size: 15px;
+  color: ${(props) => props.theme.colors.black};
+  font-weight: bold;
+`;
+
+export const Divider = styled.hr`
+  border: 1px solid ${(props) => props.theme.colors.itens};
+  margin-top: 10px;
+`;
+
+export const TotalBoxMobile = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+`;
