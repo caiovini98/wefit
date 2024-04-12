@@ -1,46 +1,59 @@
-# Getting Started with Create React App
+# Wefit Movies
+Olá, este é um projeto em resposta ao desafio técnico proposto pela WeFit, na qual consiste em buscar a partir de uma API (json-server) dados de filmes, e o usuário pode filtrar filmes, adicionar ao carrinho e por fim, finalizar a compra.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Pré-requisitos
+Antes de começar, você vai precisar ter instalado em sua máquina as seguintes ferramentas:
+[git](https://git-scm.com) e [node.js](https://nodejs.org/en/).
+Também, vai precisar de um editor para trabalhar com o código, recomendo o [VS Code](https://code.visualstudio.com/).
 
-## Available Scripts
+### Rodando o projeto
 
-In the project directory, you can run:
+```bash
+# Clone este repositório (ou download )
+$ git clone <link>
 
-### `npm start`
+# Acesse a pasta do projeto no terminal/cmd
+$ cd wefit-app
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Abra a pasta no editor de codigo (VS Code ou outro de sua preferência).
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Instale as dependências
+$ yarn install (ou npm install)
 
-### `npm test`
+# Após a instalação, execute o comando para rodar a aplicação
+$ yarn start (ou npm start)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# O servidor inciará na porta:3000. Se não abrir automaticamente, acesse 
+$ http://localhost:3000
+```
 
-### `npm run build`
+Caso o comando npm start não funcionar, devido a um erro do "react-script", verifique se a dependência do react-script está disponível ou não no package.json
+Caso não esteja, adicione manualmente no projeto por meio de:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+$ yarn add react-scripts --save (ou npm install react-scripts --save)
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Neste desafio, está sendo utilizado o Json-Server, uma biblioteca capaz de criar uma API Fake, e para rodar a API, rode o comando no terminal dentro da pasta do projeto:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+$ yarn start-json-server
+```
 
-### `npm run eject`
+Pronto! A API estará rodando perfeitamente.
+Caso dê algum erro de política, nao se preocupe, basta rodar o comando abaixo no terminal dentro da pasta do projeto - local onde você rodou o comando acima:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```bash
+$  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🛠 Tecnologias utilizadas
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+As seguintes ferramentas foram usadas na construção do projeto:
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [React](https://pt-br.reactjs.org/)
+- [JavaScript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript)
+- [Node.js](https://nodejs.org/en/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [HTML e CSS](https://www.w3schools.com/)
+- [JSON Server](https://www.npmjs.com/package/json-server)
