@@ -3,14 +3,24 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import { GrSubtractCircle } from "react-icons/gr";
 import { FaTrash } from "react-icons/fa";
 
+interface Props {
+  isMobileView: boolean;
+}
+
 export const Main = styled.main`
-margin-bottom: 25px;
+  margin-bottom: 25px;
 `;
 
 export const Container = styled.div`
   background-color: ${(props) => props.theme.colors.secondary};
   border-radius: 5px;
   padding: 22px;
+
+  @media screen and (max-width: 790px) {
+    /* Seu estilo para telas menores que 790x830 */
+    margin-left: 10px;
+    /* background-color: red; */
+  }
 `;
 
 export const Section = styled.section`
@@ -81,18 +91,18 @@ export const IncrementOrDecrementBox = styled.div`
   height: 30px;
 `;
 
-export const IncrementOrDecrementButton = styled.button`
+export const IncrementOrDecrementButton = styled.button<Props>`
   display: flex;
   align-items: center;
   background: transparent;
   border: 0;
-  padding: 0 10px;
-  font-size: 20px;
+  padding: ${({ isMobileView }) => (isMobileView ? "0 3px 0 0" : "0 10px")};
+  font-size: ${({ isMobileView }) => (isMobileView ? "16px" : "20px")};
   height: 100%;
 `;
 
-export const IncrementOrDecrementInput = styled.input`
-  width: 18%;
+export const IncrementOrDecrementInput = styled.input<Props>`
+  width: ${({ isMobileView }) => (isMobileView ? "12%" : "18%")};
   text-align: center;
 `;
 
@@ -162,8 +172,10 @@ export const SubtractIcon = styled(GrSubtractCircle)`
   cursor: pointer;
 `;
 
-export const TrashIcon = styled(FaTrash)`
+export const TrashIcon = styled(FaTrash)<Props>`
   color: ${(props) => props.theme.colors.color_button};
-  font-size: 24px;
+  font-size: ${({ isMobileView }) => (isMobileView ? "18px" : "24px")};
   cursor: pointer;
 `;
+
+// 790x830

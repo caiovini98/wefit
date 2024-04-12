@@ -33,3 +33,10 @@ h6 {
     overflow: visible;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .container {
+    width: 75%;
+    margin: 0 auto;
+  }
+}

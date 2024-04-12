@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -39,6 +39,7 @@ export default function ShoppingCart() {
   const [quantities, setQuantities] = useState(
     myCart.map((cartItem) => cartItem.quantity)
   );
+  const [isMobileView, setIsMobileView] = useState(false);
 
   const handleIncrement = (index: number) => {
     const updatedQuantities = [...quantities];
@@ -80,78 +81,200 @@ export default function ShoppingCart() {
     navigate("/purchased");
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 790);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <Main>
       <Container>
-        <Section>
-          <Table>
-            <Thead>
-              <Tr>
-                <Th>Produto</Th>
-                <Th>Qtd</Th>
-                <Th>Subtotal</Th>
-              </Tr>
-            </Thead>
+        {isMobileView ? (
+          <>
             {myCart.map((cartItem, index) => (
-              <Tbody>
-                <Tr key={cartItem.id}>
-                  <Td>
-                    <ProductBox>
-                      <Image src={cartItem.image} alt={cartItem.image} />
-                      <ProductInfo>
-                        <ProductName>{cartItem.title}</ProductName>
-                        <ProductPrice>
+              <>
+                <section style={{ display: "flex", marginTop: 20 }}>
+                  <img
+                    style={{ width: 70, height: 80 }}
+                    src={cartItem.image}
+                    alt={cartItem.image}
+                  />
+                  <div style={{ marginLeft: 16, flexGrow: 1 }}>
+                    <div
+                      style={{
+                        // backgroundColor: "red",
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <span style={{ fontSize: 16 }}>{cartItem.title}</span>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 14,
+                          alignItems: "center",
+                        }}
+                      >
+                        <span>
                           R${" "}
                           {cartItem.price.toLocaleString("pt-BR", {
                             minimumFractionDigits: 2,
                           })}
-                        </ProductPrice>
-                      </ProductInfo>
-                    </ProductBox>
-                  </Td>
-                  <Td>
-                    <IncrementOrDecrementBox>
-                      <IncrementOrDecrementButton
-                        onClick={() => handleDecrement(index)}
+                        </span>
+                        <TrashIcon isMobileView={isMobileView} />
+                      </div>
+                    </div>
+                    <div
+                      style={{
+                        marginTop: 15,
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <IncrementOrDecrementButton
+                          isMobileView={isMobileView}
+                          onClick={() => handleDecrement(index)}
+                        >
+                          <SubtractIcon />
+                        </IncrementOrDecrementButton>
+                        <IncrementOrDecrementInput
+                          isMobileView={isMobileView}
+                          value={quantities[index]}
+                          readOnly
+                        />
+                        <IncrementOrDecrementButton
+                          isMobileView={isMobileView}
+                          onClick={() => handleIncrement(index)}
+                        >
+                          <AddIcon />
+                        </IncrementOrDecrementButton>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          marginRight: 5,
+                          marginTop: 10,
+                          borderTop: 3,
+                        }}
                       >
-                        <SubtractIcon />
-                      </IncrementOrDecrementButton>
-                      <IncrementOrDecrementInput
-                        value={quantities[index]}
-                        readOnly
-                      />
-                      <IncrementOrDecrementButton
-                        onClick={() => handleIncrement(index)}
-                      >
-                        <AddIcon />
-                      </IncrementOrDecrementButton>
-                    </IncrementOrDecrementBox>
-                  </Td>
-                  <Td>R$ {moneyMask(cartItem.price, quantities[index])}</Td>
-                  <Td>
-                    <RemoveButton onClick={() => handleRemoveItem(cartItem.id)}>
-                      <TrashIcon />
-                    </RemoveButton>
-                  </Td>
-                </Tr>
-              </Tbody>
+                        <span>Subtotal</span>
+                        <span>
+                          R$ {moneyMask(cartItem.price, quantities[index])}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </>
             ))}
-          </Table>
-        </Section>
-        <FinishBox>
-          <FinishButton onClick={handleChangePage}>
-            Finalizar pedido
-          </FinishButton>
-          <TotalBox>
-            <Total>Total</Total>
-            <PriceTotal>
-              R${" "}
-              {calculatePriceTotal().toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
-            </PriceTotal>
-          </TotalBox>
-        </FinishBox>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: 20,
+                borderTop: "1px solid",
+                borderTopColor: "#999",
+              }}
+            >
+              <span>Total</span>
+              <span>
+                R${" "}
+                {calculatePriceTotal().toLocaleString("pt-BR", {
+                  minimumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+            <button style={{ width: "100%" }}>Finalizar pedido</button>
+          </>
+        ) : (
+          <>
+            <Section>
+              <Table>
+                <Thead>
+                  <Tr>
+                    <Th>Produto</Th>
+                    <Th>Qtd</Th>
+                    <Th>Subtotal</Th>
+                  </Tr>
+                </Thead>
+                {myCart.map((cartItem, index) => (
+                  <Tbody>
+                    <Tr key={cartItem.id}>
+                      <Td>
+                        <ProductBox>
+                          <Image src={cartItem.image} alt={cartItem.image} />
+                          <ProductInfo>
+                            <ProductName>{cartItem.title}</ProductName>
+                            <ProductPrice>
+                              R${" "}
+                              {cartItem.price.toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
+                            </ProductPrice>
+                          </ProductInfo>
+                        </ProductBox>
+                      </Td>
+                      <Td>
+                        <IncrementOrDecrementBox>
+                          <IncrementOrDecrementButton
+                            isMobileView={isMobileView}
+                            onClick={() => handleDecrement(index)}
+                          >
+                            <SubtractIcon />
+                          </IncrementOrDecrementButton>
+                          <IncrementOrDecrementInput
+                            isMobileView={isMobileView}
+                            value={quantities[index]}
+                            readOnly
+                          />
+                          <IncrementOrDecrementButton
+                            isMobileView={isMobileView}
+                            onClick={() => handleIncrement(index)}
+                          >
+                            <AddIcon />
+                          </IncrementOrDecrementButton>
+                        </IncrementOrDecrementBox>
+                      </Td>
+                      <Td>R$ {moneyMask(cartItem.price, quantities[index])}</Td>
+                      <Td>
+                        <RemoveButton
+                          onClick={() => handleRemoveItem(cartItem.id)}
+                        >
+                          <TrashIcon isMobileView={isMobileView} />
+                        </RemoveButton>
+                      </Td>
+                    </Tr>
+                  </Tbody>
+                ))}
+              </Table>
+            </Section>
+            <FinishBox>
+              <FinishButton onClick={handleChangePage}>
+                Finalizar pedido
+              </FinishButton>
+              <TotalBox>
+                <Total>Total</Total>
+                <PriceTotal>
+                  R${" "}
+                  {calculatePriceTotal().toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                  })}
+                </PriceTotal>
+              </TotalBox>
+            </FinishBox>
+          </>
+        )}
       </Container>
     </Main>
   );
