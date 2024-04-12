@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import {
   Container,
@@ -13,6 +13,8 @@ import {
 
 export default function HeaderComponent() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const route = location.pathname;
   const { cart, setMyCart } = useCart();
   const [totalItems, setTotalItems] = useState(0);
 
@@ -33,10 +35,18 @@ export default function HeaderComponent() {
     }
   };
 
+  const goHome = () => {
+    if (route === "/") {
+      window.location.reload();
+    } else {
+      navigate("/");
+    }
+  };
+
   return (
     <>
       <Container>
-        <Title onClick={() => navigate("/")}>WeMovies</Title>
+        <Title onClick={() => goHome()}>WeMovies</Title>
         <BoxCart>
           <ItensCart>
             <Span>Meu Carrinho</Span>

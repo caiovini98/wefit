@@ -113,7 +113,7 @@ export default function ShoppingCart() {
           <>
             {myCart.map((cartItem, index) => (
               <>
-                <SectionMobile>
+                <SectionMobile key={cartItem.id}>
                   <ImageMobile src={cartItem.image} alt={cartItem.image} />
                   <InfoCartMobile>
                     <TitleBoxMobile>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { TailSpin } from "react-loader-spinner";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../../models/product";
@@ -22,6 +23,7 @@ import {
   Title,
   ButtonReloadPage,
   Image,
+  Spinner,
 } from "./styles";
 
 import NotFound from "../../assets/notfound.png";
@@ -39,7 +41,6 @@ export default function Home() {
     fetch("http://localhost:8000/products")
       .then((res) => {
         if (!res.ok) {
-          console.log("erro aqui");
           throw new Error("Erro ao carregar os dados.");
         }
         return res.json();
@@ -49,26 +50,25 @@ export default function Home() {
           ...item,
           quantity: 0,
         }));
-        console.log("newData: ", newData);
         setCart(newData);
         setFilmesDisponiveis(newData);
         setLoadingData(false);
       })
       .catch((error) => {
-        console.error("Erro de rede:", error);
         setLoadingData(true);
       });
   }, []);
 
   useEffect(() => {
     function handlePopState() {
+      setLoading(true);
       const path = window.location.pathname;
       const searchTerm: string = path.split("/").pop() as string;
 
       fetch(`http://localhost:8000/products?q=${searchTerm}`)
         .then((response) => {
           if (!response.ok) {
-            throw new Error("Erro ao buscar produtos");
+            throw new Error("Erro");
           }
           return response.json();
         })
@@ -76,11 +76,13 @@ export default function Home() {
           const moviesFiltered = cart.filter((itemCart) =>
             data.some((itemData) => itemData.id === itemCart.id)
           );
-          console.log("moviesFiltered: ", moviesFiltered);
           setFilmesDisponiveis(moviesFiltered);
         })
         .catch((error) => {
-          console.error("Erro ao buscar produtos:", error);
+          throw new Error("Erro ao buscar filmes");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
 
@@ -96,10 +98,11 @@ export default function Home() {
   };
 
   const handleSearch = () => {
+    setLoading(true);
     fetch(`http://localhost:8000/products?q=${searchMovie}`)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Erro ao buscar produtos");
+          throw new Error("Erro");
         }
         return response.json();
       })
@@ -107,11 +110,13 @@ export default function Home() {
         const moviesFiltered = cart.filter((itemCart) =>
           data.some((itemData) => itemData.id === itemCart.id)
         );
-        // console.log("moviesFiltered: ", moviesFiltered);
         setFilmesDisponiveis(moviesFiltered);
       })
       .catch((error) => {
-        console.error("Erro ao buscar produtos:", error);
+        throw new Error("Erro ao buscar filmes");
+      })
+      .finally(() => {
+        setLoading(false);
       });
 
     const searchTerm = encodeURIComponent(searchMovie);
@@ -132,7 +137,6 @@ export default function Home() {
         return filmeAdicionado;
       }
     );
-    console.log("filmesDisponiveisAtualizados: ", filmesDisponiveisAtualizados);
     setFilmesDisponiveis(filmesDisponiveisAtualizados);
     addToCart(product);
   };
@@ -143,7 +147,7 @@ export default function Home() {
         <Container loadingData={loadingData}>
           <Title>Parece que não há nada por aqui :(</Title>
           <Image src={NotFound} alt="image" />
-          <ButtonReloadPage onClick={() => window.location.reload}>
+          <ButtonReloadPage onClick={() => window.location.reload()}>
             Recarregar página
           </ButtonReloadPage>
         </Container>
@@ -155,36 +159,47 @@ export default function Home() {
               <SearchIcon />
             </ButtonSearch>
           </InputContainer>
-          <ProductCardsContainer>
-            {filmesDisponiveis.map((product) => (
-              <ProductCards key={product.id}>
-                <ImageProduct src={product.image} alt={product.image} />
-                <DetailProduct>
-                  <TitleProduct>{product.title}</TitleProduct>
-                  <PriceProduct>
-                    R${" "}
-                    {product.price.toLocaleString("pt-BR", {
-                      minimumFractionDigits: 2,
-                    })}
-                  </PriceProduct>
-                </DetailProduct>
-                <ButtonAddProduct
-                  colorAddCart={product.quantity}
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <IconBox>
-                    <IconAddCart />
-                    <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
-                  </IconBox>
-                  <TitleAddCard>Adicionar ao carrinho</TitleAddCard>
-                </ButtonAddProduct>
-              </ProductCards>
-            ))}
-          </ProductCardsContainer>
+          {loading ? (
+            <Spinner>
+              <TailSpin
+                visible
+                height="80"
+                width="80"
+                color="#FFFFFF"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+              />
+            </Spinner>
+          ) : (
+            <ProductCardsContainer>
+              {filmesDisponiveis.map((product) => (
+                <ProductCards key={product.id}>
+                  <ImageProduct src={product.image} alt={product.image} />
+                  <DetailProduct>
+                    <TitleProduct>{product.title}</TitleProduct>
+                    <PriceProduct>
+                      R${" "}
+                      {product.price.toLocaleString("pt-BR", {
+                        minimumFractionDigits: 2,
+                      })}
+                    </PriceProduct>
+                  </DetailProduct>
+                  <ButtonAddProduct
+                    colorAddCart={product.quantity}
+                    onClick={() => handleAddToCart(product)}
+                  >
+                    <IconBox>
+                      <IconAddCart />
+                      <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
+                    </IconBox>
+                    <TitleAddCard>Adicionar ao carrinho</TitleAddCard>
+                  </ButtonAddProduct>
+                </ProductCards>
+              ))}
+            </ProductCardsContainer>
+          )}
         </Container>
       )}
     </>
   );
-
-  // return ;
 }

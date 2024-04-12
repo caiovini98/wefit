@@ -93,6 +93,11 @@ export const SearchIcon = styled(IoIosSearch)`
   font-size: 24px;
 `;
 
+export const Spinner = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export const ProductCardsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
