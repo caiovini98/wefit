@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   min-height: 70vh;
-  background-color: red;
   background-color: ${(props) => props.theme.colors.secondary};
   border-radius: 5px;
   display: flex;

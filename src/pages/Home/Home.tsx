@@ -19,13 +19,19 @@ import {
   QuantityProduct,
   ButtonAddProduct,
   TitleAddCard,
+  Title,
+  ButtonReloadPage,
+  Image,
 } from "./styles";
+
+import NotFound from "../../assets/notfound.png";
 
 export default function Home() {
   const navigate = useNavigate();
   const { addToCart, setCart, cart } = useCart();
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
   const [searchMovie, setSearchMovie] = useState("");
   const [filmesDisponiveis, setFilmesDisponiveis] = useState<Product[]>([]);
 
@@ -33,6 +39,7 @@ export default function Home() {
     fetch("http://localhost:8000/products")
       .then((res) => {
         if (!res.ok) {
+          console.log("erro aqui");
           throw new Error("Erro ao carregar os dados.");
         }
         return res.json();
@@ -45,11 +52,11 @@ export default function Home() {
         console.log("newData: ", newData);
         setCart(newData);
         setFilmesDisponiveis(newData);
-        setLoading(false);
+        setLoadingData(false);
       })
       .catch((error) => {
         console.error("Erro de rede:", error);
-        setLoading(false);
+        setLoadingData(true);
       });
   }, []);
 
@@ -131,39 +138,53 @@ export default function Home() {
   };
 
   return (
-    <Container>
-      <InputContainer>
-        <Input value={searchMovie} onChange={handleInputChange} />
-        <ButtonSearch disabled={!searchMovie} onClick={handleSearch}>
-          <SearchIcon />
-        </ButtonSearch>
-      </InputContainer>
-      <ProductCardsContainer>
-        {filmesDisponiveis.map((product) => (
-          <ProductCards key={product.id}>
-            <ImageProduct src={product.image} alt={product.image} />
-            <DetailProduct>
-              <TitleProduct>{product.title}</TitleProduct>
-              <PriceProduct>
-                R${" "}
-                {product.price.toLocaleString("pt-BR", {
-                  minimumFractionDigits: 2,
-                })}
-              </PriceProduct>
-            </DetailProduct>
-            <ButtonAddProduct
-              colorAddCart={product.quantity}
-              onClick={() => handleAddToCart(product)}
-            >
-              <IconBox>
-                <IconAddCart />
-                <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
-              </IconBox>
-              <TitleAddCard>Adicionar ao carrinho</TitleAddCard>
-            </ButtonAddProduct>
-          </ProductCards>
-        ))}
-      </ProductCardsContainer>
-    </Container>
+    <>
+      {loadingData ? (
+        <Container loadingData={loadingData}>
+          <Title>Parece que não há nada por aqui :(</Title>
+          <Image src={NotFound} alt="image" />
+          <ButtonReloadPage onClick={() => window.location.reload}>
+            Recarregar página
+          </ButtonReloadPage>
+        </Container>
+      ) : (
+        <Container loadingData={loadingData}>
+          <InputContainer>
+            <Input value={searchMovie} onChange={handleInputChange} />
+            <ButtonSearch disabled={!searchMovie} onClick={handleSearch}>
+              <SearchIcon />
+            </ButtonSearch>
+          </InputContainer>
+          <ProductCardsContainer>
+            {filmesDisponiveis.map((product) => (
+              <ProductCards key={product.id}>
+                <ImageProduct src={product.image} alt={product.image} />
+                <DetailProduct>
+                  <TitleProduct>{product.title}</TitleProduct>
+                  <PriceProduct>
+                    R${" "}
+                    {product.price.toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
+                  </PriceProduct>
+                </DetailProduct>
+                <ButtonAddProduct
+                  colorAddCart={product.quantity}
+                  onClick={() => handleAddToCart(product)}
+                >
+                  <IconBox>
+                    <IconAddCart />
+                    <QuantityProduct>{product.quantity ?? 0}</QuantityProduct>
+                  </IconBox>
+                  <TitleAddCard>Adicionar ao carrinho</TitleAddCard>
+                </ButtonAddProduct>
+              </ProductCards>
+            ))}
+          </ProductCardsContainer>
+        </Container>
+      )}
+    </>
   );
+
+  // return ;
 }
